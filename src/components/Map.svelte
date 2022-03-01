@@ -11,6 +11,14 @@
 	export let zoom;
 
 
+    let layers = [
+        "daily","daily-days","monthly","alltime"
+    ]
+
+    let layersMin = [
+        "daily-night","daily-days-night","monthly-night","alltime-night"
+    ]
+
     onMount(async () => {
         load();
     });
@@ -27,23 +35,49 @@
 		});
 	}
 
-    function handleClick() {
+    function handleClick(mapLayer) {
+
+        let toHide = layers.filter(d => d != mapLayer);
+        toHide = toHide.concat(layersMin.filter(d => d != mapLayer));
+
+        for (let layer in toHide){
+        
+            map.setLayoutProperty(
+                `acis-${toHide[layer]}`,
+                'visibility',
+                'none'
+            );
+
+            map.setLayoutProperty(
+                `acis-${toHide[layer]}-2`,
+                'visibility',
+                'none'
+            );
+
+            map.setLayoutProperty(
+                `acis-${toHide[layer]}-3`,
+                'visibility',
+                'none'
+            );
+            
+        }
+
 		map.setLayoutProperty(
-            "acis-alltime",
+            `acis-${mapLayer}`,
             'visibility',
-            'none'
+            'visible'
         );
 
         map.setLayoutProperty(
-            "acis-alltime-2",
+            `acis-${mapLayer}-2`,
             'visibility',
-            'none'
+            'visible'
         );
 
         map.setLayoutProperty(
-            "acis-alltime-3",
+            `acis-${mapLayer}-3`,
             'visibility',
-            'none'
+            'visible'
         );
 	}
 
@@ -61,7 +95,17 @@
 	/>
 </svelte:head>
 
-<button on:click={handleClick}>test</button>
+<p>Day-time Max</p>
+{#each layers as layer}
+    <button on:click={() => handleClick(layer)}>{layer}</button>
+{/each}
+
+<p>Night-time Max</p>
+{#each layersMin as layer}
+    <button on:click={() => handleClick(layer)}>{layer}</button>
+{/each}
+
+
 <div bind:this={container}>
 	{#if map}
 		<slot />
