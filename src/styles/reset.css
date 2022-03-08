@@ -7,6 +7,10 @@ body {
 	font-feature-settings: 'kern' 1, 'onum' 0, 'liga' 0, 'tnum' 1;
 	text-rendering: optimizeLegibility;
   word-wrap: break-word;
+  background: #EDEDED;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;   /* Firefox */
 }
 
 h1,
