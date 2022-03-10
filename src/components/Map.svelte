@@ -42,15 +42,8 @@
 	let map;
 
     const bounds = [
-
             [-22.275411,-13.090124],
             [20.68255,12.703398]
-
-        // [-124.7844079, 24.7433195], // Southwest coordinates
-        // [ -66.9513812, 49.3457868],   // Northeast coordinates
-        // [32.958984, -5.353521], // southwestern corner of the bounds
-        // [43.50585, 5.615985] // northeastern corner of the bounds
-
     ];
 
     let center = [-0.7964304999999996,-0.19336299999999973];
@@ -78,18 +71,17 @@
                 }
             }
         })
-
-        console.log(geojson)
-
-
-		map = new mapbox.Map({
-			container,
-			style: 'mapbox://styles/dock4242/cl0bhzae7000y14utgxgy71f1', //'mapbox://styles/dock4242/cl0banu3w000i14l8w1woe65r',
-            // // maxBounds: bounds,
-			center: center,//[-95.973515, 38.382024],//,
-            zoom: 7,
-            scrollZoom: false
-		});
+        if(!map){
+            map = new mapbox.Map({
+                container,
+                style: 'mapbox://styles/dock4242/cl0bhzae7000y14utgxgy71f1', //'mapbox://styles/dock4242/cl0banu3w000i14l8w1woe65r',
+                // // maxBounds: bounds,
+                center: center,//[-95.973515, 38.382024],//,
+                zoom: 7,
+                scrollZoom: false
+		    });
+        }
+		
 
         let padding = 0;
         let navPosition = 'top-right';
@@ -103,20 +95,6 @@
 
         map.addControl(new mapbox.AttributionControl(), 'top-left');
         map.addControl(new mapbox.NavigationControl({visualizePitch:false, showCompass: false}), navPosition);
-
-        const markerHeight = 17;
-        const markerRadius = 0;
-        const linearOffset = 0;
-        const popupOffsets = {
-            'top': [0, 0],
-            'top-left': [0, 0],
-            'top-right': [0, 0],
-            'bottom': [0, -markerHeight],
-            'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-            'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-            'left': [markerRadius, (markerHeight - markerRadius) * -1],
-            'right': [-markerRadius, (markerHeight - markerRadius) * -1]
-        };
 
         let popup = new mapbox.Popup({ focusAfterOpen: false, maxWidth: '340px' });
         let popupAdded = false;
@@ -145,29 +123,34 @@
                 return 14;
             }
 
-            map.addSource('test-circles', {
-                'type': 'geojson',
-                'data': geojson
-            });
+            let sources = map.getStyle().sources
+            if(Object.keys(sources).indexOf("test-circles") == -1){
+                map.addSource('test-circles', {
+                    'type': 'geojson',
+                    'data': geojson
+                });
 
-            map.addLayer({
-                'id': 'hover-effect',
-                'type': 'circle',
-                'source': 'test-circles',
-                'layout': {},
-                'paint': {
-                    'circle-stroke-color': '#000',
-                    'circle-radius': 13,
-                    'circle-stroke-width': 2,
-                    'circle-color': "rgba(0,0,0,0)",
-                    'circle-stroke-opacity':[
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        1,
-                        0
-                    ]
-                }
-            });
+                map.addLayer({
+                    'id': 'hover-effect',
+                    'type': 'circle',
+                    'source': 'test-circles',
+                    'layout': {},
+                    'paint': {
+                        'circle-stroke-color': '#000',
+                        'circle-radius': 13,
+                        'circle-stroke-width': 2,
+                        'circle-color': "rgba(0,0,0,0)",
+                        'circle-stroke-opacity':[
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            1,
+                            0
+                        ]
+                    }
+                });
+            }
+
+            
  
 
             const matchExpression = ['match', ['get','station']];
@@ -382,7 +365,6 @@
 
 
 <div class="mapbox-container" bind:this={container}>
-    
 	{#if map}
 		<slot />
 	{/if}

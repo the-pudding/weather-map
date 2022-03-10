@@ -31,7 +31,7 @@
 </script>
 
 <footer>
-  <p class="notice">Notice: Read more!</p>
+  <p class="notice">More from The Pudding</p>
 
   <div class="wrapper">
     <section class="stories">
@@ -81,7 +81,7 @@
     border-radius: 10px;
     box-shadow: 0 0 15px 5px rgba(0,0,0,.15);
     padding: 1rem;
-
+    margin: 1rem;
     max-width: 1300px;
   }
 
@@ -179,6 +179,7 @@
   @media only screen and (max-width: 500px) {
     footer {
       padding: 1em .3em;
+      margin: 0 auto;
       margin-top: 2em;
       border-radius: 0px;
     }
