@@ -66,14 +66,50 @@
     <div class="map-title">
       <p class="">Days without a Daily Record High Temperature</p>
     </div>
-    
     <Map lat={35} lon={-84} zoom={3.5} data={data} least={least}>
     </Map>
+  </div>
+  <div class="method">
+    <p class="method-big">
+      Report all records to your supervisor.
+    </p>
+    <div class="desc">
+      <p>This project updates daily.</p>
+      <p>Weather records are collected from <a href="http://www.rcc-acis.org/docs_webservices.html">ACIS</a>, which uses &ldquo;threaded&rdquo; records for approximately 400 U.S. cities. Proximate weather stations are combined to give a historic record for a particular city (weather stations are often decommissioned and moved to different locations).</p>
+      <p>You can browse this data on <a href="http://threadex.rcc-acis.org/">Threaded Extremes.</a></p>
+    </div>
   </div>
 </div>
 
 
+
 <style>
+
+  .method {
+    border: 3px solid black;
+    border-top: none;
+    padding: 1rem;
+    background-color: black;
+  }
+
+  .method p, .method a {
+    color: white;
+  }
+
+  .method-big {
+    font-size: 36px;
+    font-weight: 700;
+  }
+
+  .method .desc {
+    display: block;
+  }
+
+  .desc p {
+    margin-bottom: 1rem;
+    font-size: 16px;
+  }
+
   p {
     margin: 0;
     font-family: 'Yantramanav';
@@ -373,9 +409,7 @@
     p.highlight {
       font-size: 20px;
     }
-  }
 
-  @media only screen and (max-width: 1150px) {
     .notice-bar {
       height: 60px;
     }
@@ -392,6 +426,14 @@
   @media only screen and (max-width: 900px) {
     .top-bar .right {
       font-size: 18px;
+    }
+
+    .method-big {
+      font-size: 28px;
+    }
+
+    .method .desc p {
+      font-size: 16px;
     }
 
     .top-bar .left {
@@ -426,15 +468,45 @@
       text-align: center;
       padding: .5rem;
     }
+
+    .method-big {
+      font-size: 24px;
+      margin-bottom: 1rem;
+    }
+
+    .method .desc p {
+      font-size: 14px;
+    }
   }
 
   @media only screen and (max-width: 600px) {
     p.highlight {
       font-size: 16px;
     }
+    
   }
 
   @media only screen and (max-width: 500px) {
+
+    .method {
+      background: white;
+      border-width: 1px;
+    }
+
+    .method p, .method a {
+      color: black;
+    }
+
+    .method-big {
+      font-size: 18px;
+      margin-bottom: 1rem;
+    }
+
+    .method .desc p {
+      font-size: 12px;
+      margin-bottom: .5rem;
+      line-height: 1.1;
+    }
 
     .byline {
       margin-top: .5rem;

@@ -2,7 +2,7 @@
 	import { onDestroy } from 'svelte';
     import mapbox from 'mapbox-gl';
     import { onMount } from "svelte";
-    import { timeFormat, geoAlbersUsa, geoMercator } from "d3";
+    import { selectAll, timeFormat, geoAlbersUsa, geoMercator } from "d3";
     import viewport from "$stores/viewport.js";
 
     export let data;
@@ -71,6 +71,9 @@
                 }
             }
         })
+
+        let popup = null;
+
         if(!map){
             map = new mapbox.Map({
                 container,
@@ -80,6 +83,7 @@
                 zoom: 7,
                 scrollZoom: false
 		    });
+
         }
 		
 
@@ -90,17 +94,23 @@
             navPosition = 'bottom-right';
         }
 
-        map.fitBounds(bounds, {padding: padding});
+        
 
-
-        map.addControl(new mapbox.AttributionControl(), 'top-left');
-        map.addControl(new mapbox.NavigationControl({visualizePitch:false, showCompass: false}), navPosition);
-
-        let popup = new mapbox.Popup({ focusAfterOpen: false, maxWidth: '340px' });
         let popupAdded = false;
         let hoveredStation = null;
 
         map.on('load', function(){
+            
+            map.fitBounds(bounds, {padding: padding});
+            
+            let sizeControlLength = selectAll(".mapboxgl-ctrl-zoom-in").size();
+            
+            if(sizeControlLength == 0){
+                map.addControl(new mapbox.AttributionControl(), 'top-left');
+                map.addControl(new mapbox.NavigationControl({visualizePitch:false, showCompass: false}), navPosition);
+            }
+
+            
 
             function sizeFont(days){
 
@@ -150,9 +160,6 @@
                 });
             }
 
-            
- 
-
             const matchExpression = ['match', ['get','station']];
             const sizeExpression = ['match', ['get','station']];
 
@@ -176,7 +183,7 @@
             map.setPaintProperty('acis-reproj-7ytdey', 'text-color', "#000000");
             map.setPaintProperty('state-boundaries copy', 'fill-color', "#e8e8e8");
 
-            
+
             map.setLayoutProperty('acis-reproj-7ytdey-top-layer', 'text-field', matchExpression);
             map.setLayoutProperty('acis-reproj-7ytdey-mid-layer', 'text-field', matchExpression);
             map.setLayoutProperty('acis-reproj-7ytdey', 'text-field', matchExpression);
@@ -190,106 +197,115 @@
 
 
             let leastDate = new Date(least.days_since_daily_date.slice(0,4), +least.days_since_daily_date.slice(5,7) -1, least.days_since_daily_date.slice(8,10));
+            console.log("hiiii")
+            if(!popup) {
 
-            popup
-                .setLngLat([least.longitude,least.latitude])
-                //.setHTML("hi")
-                .setHTML(`${least.days_since_daily} days ago, it was ${least.days_since_val}°F in <b>${least.name}, ${least.state_abbr}</b> on <b>${formatTime(leastDate)}</b>. That is the hottest ${formatTimeNoYear(leastDate)} on record for the city.`)
-                .addTo(map);
+                popup = new mapbox.Popup({ focusAfterOpen: false, maxWidth: '340px' });
 
-            popupAdded = true;
+                popup
+                    .setLngLat([least.longitude,least.latitude])
+                    //.setHTML("hi")
+                    .setHTML(`${least.days_since_daily} days ago, it was ${least.days_since_val}°F in <b>${least.name}, ${least.state_abbr}</b> on <b>${formatTime(leastDate)}</b>. That is the hottest ${formatTimeNoYear(leastDate)} on record for the city.`)
+                    .addTo(map);
+
+                popupAdded = true;
+            }
+
+            
+
+            map.on('mousemove', (e) => {
+                const features = map.queryRenderedFeatures(e.point);
+                
+                // Limit the number of properties we're displaying for
+                // legibility and performance
+                const displayProperties = [
+                    'type',
+                    'properties',
+                    'id',
+                    'layer',
+                    'source',
+                    'sourceLayer',
+                    'state'
+                ];
+
+                const displayFeatures = features.map((feat) => {
+                    const displayFeat = {};
+                    displayProperties.forEach((prop) => {
+                        displayFeat[prop] = feat[prop];
+                    });
+                    return displayFeat;
+                }).filter(function(d){
+                    return d.layer.id.includes("acis")
+                });
+
+                if(displayFeatures.length > 0 && popupAdded){
+
+                    popupData = displayFeatures[0].properties;
+
+                    // if (hoveredStation !== null) {
+                    //     map.setFeatureState(
+                    //         { source: 'acis-reproj-7ytdey', id: hoveredStation },
+                    //         { hover: false }
+                    //     );
+                    // }
+
+                    // hoveredStation = popupData.station;
+                    // map.setFeatureState(
+                    //     { source: 'acis-reproj-7ytdey', id: hoveredStation },
+                    //     { hover: true }
+                    // );
+
+                    if(hoveredStation !== popupData.station){
+                        popup.remove();
+
+                        map.removeFeatureState({
+                            source: 'test-circles',
+                            id: hoveredStation
+                        });
+
+                        hoveredStation = stationIds.indexOf(popupData.station);
+
+
+
+                        map.setFeatureState({
+                            source: 'test-circles',
+                            id:hoveredStation
+                        },
+                        {
+                            hover: true
+                        });
+
+
+                        // map.setFilter('circles', [ "all", [ "match", ["get", "station"], [popupData.station], true, false ] ]);
+                        console.log("circling")
+
+                        popup
+                            .setLngLat([popupData.longitude,popupData.latitude])
+                            .setHTML(`${popupData.days_since_daily} days ago, it was ${popupData.days_since_val}°F in <b>${popupData.name}, ${popupData.state_abbr}</b> on <b>${formatTime(popupDataDate)}</b>, the hottest ${formatTimeNoYear(popupDataDate)} on record for the city.`)
+                            .addTo(map)
+                    }
+                }
+
+                else {
+                    map.setFeatureState(
+                    {
+                        source: 'test-circles',
+                        id: hoveredStation
+                    },
+                    {
+                        hover: false
+                    }
+                    );
+                    hoveredStation = null;
+                    popup.remove();
+                }
+
+
+            });
 
         })
 
-        map.on('mousemove', (e) => {
-            const features = map.queryRenderedFeatures(e.point);
-            
-            // Limit the number of properties we're displaying for
-            // legibility and performance
-            const displayProperties = [
-                'type',
-                'properties',
-                'id',
-                'layer',
-                'source',
-                'sourceLayer',
-                'state'
-            ];
-
-            const displayFeatures = features.map((feat) => {
-                const displayFeat = {};
-                displayProperties.forEach((prop) => {
-                    displayFeat[prop] = feat[prop];
-                });
-                return displayFeat;
-            }).filter(function(d){
-                return d.layer.id.includes("acis")
-            });
-
-            if(displayFeatures.length > 0 && popupAdded){
-
-                popupData = displayFeatures[0].properties;
-
-                // if (hoveredStation !== null) {
-                //     map.setFeatureState(
-                //         { source: 'acis-reproj-7ytdey', id: hoveredStation },
-                //         { hover: false }
-                //     );
-                // }
-
-                // hoveredStation = popupData.station;
-                // map.setFeatureState(
-                //     { source: 'acis-reproj-7ytdey', id: hoveredStation },
-                //     { hover: true }
-                // );
-
-                if(hoveredStation !== popupData.station){
-                    popup.remove();
-
-                    map.removeFeatureState({
-                        source: 'test-circles',
-                        id: hoveredStation
-                    });
-
-                    hoveredStation = stationIds.indexOf(popupData.station);
-
-
-
-                    map.setFeatureState({
-                        source: 'test-circles',
-                        id:hoveredStation
-                    },
-                    {
-                        hover: true
-                    });
-
-
-                    // map.setFilter('circles', [ "all", [ "match", ["get", "station"], [popupData.station], true, false ] ]);
-                    console.log("circling")
-
-                    popup
-                        .setLngLat([popupData.longitude,popupData.latitude])
-                        .setHTML(`${popupData.days_since_daily} days ago, it was ${popupData.days_since_val}°F in <b>${popupData.name}, ${popupData.state_abbr}</b> on <b>${formatTime(popupDataDate)}</b>, the hottest ${formatTimeNoYear(popupDataDate)} on record for the city.`)
-                        .addTo(map)
-                }
-            }
-
-            else {
-                map.setFeatureState(
-                {
-                    source: 'test-circles',
-                    id: hoveredStation
-                },
-                {
-                    hover: false
-                }
-                );
-                hoveredStation = null;
-                popup.remove();
-            }
-
-
-        });
+        
 
 	}
 
@@ -389,6 +405,7 @@
         margin-bottom: 1rem;
         margin-top: 1rem;
         padding: .5rem;
+        min-height: 100px;
     }
 
     .mobile-pop-up-content {
@@ -397,6 +414,7 @@
         text-align: center;
         line-height: 1.2;
         margin: 0;
+        align-self: center;
     }
 
     @media only screen and (max-width: 500px) {
@@ -404,7 +422,7 @@
             height: 70vw;
         }
         .mobile-pop-up {
-            display: block;
+            display: flex;
         }
     }
 </style>

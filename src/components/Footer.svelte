@@ -81,8 +81,9 @@
     border-radius: 10px;
     box-shadow: 0 0 15px 5px rgba(0,0,0,.15);
     padding: 1rem;
-    margin: 1rem;
+    margin: 0 auto;
     max-width: 1300px;
+    margin-bottom: 1rem;
   }
 
   a,
@@ -92,7 +93,7 @@
   }
 
   .wrapper {
-    border: 3px solid black;
+    /* border: 3px solid black; */
     padding: 1em .5em;
   }
 
@@ -158,8 +159,7 @@
 
   .notice {
     font-size:24px;
-    font-weight: 900;
-    text-transform: uppercase;
+    font-weight: 600;
     text-align: center;
   }
 
@@ -176,6 +176,13 @@
       padding: 0 1em;
     }
   }
+
+  @media only screen and (max-width: 1300px) {
+    footer {
+      margin: 1rem;
+    }
+  }
+
   @media only screen and (max-width: 500px) {
     footer {
       padding: 1em .3em;
