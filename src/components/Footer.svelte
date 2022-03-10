@@ -31,56 +31,69 @@
 </script>
 
 <footer>
-  <section class="stories">
-    {#each stories as { hed, url, image }}
-      <div class="story">
-        <a href="https://pudding.cool/{url}">
-          <img
-            src="https://pudding.cool/common/assets/thumbnails/640/{image}.jpg"
-            alt="thumbnail"
-          />
-          <span>{hed}</span>
-        </a>
-      </div>
-    {/each}
-  </section>
+  <p class="notice">Notice: Read more!</p>
 
-  <section class="about">
-    <div class="wordmark">
-      {@html wordmark}
-    </div>
-    <p>
-      <a href="https://pudding.cool">The Pudding</a>
-      is a digital publication that explains ideas debated in culture with visual essays.
-    </p>
-  </section>
-
-  <section class="links">
-    <ul>
-      {#each links as link}
-        <li>
-          <a href={link.url}>
-            <span>{link.name.toUpperCase()}</span>
+  <div class="wrapper">
+    <section class="stories">
+      {#each stories as { hed, url, image }}
+        <div class="story">
+          <a href="https://pudding.cool/{url}">
+            <img
+              src="https://pudding.cool/common/assets/thumbnails/640/{image}.jpg"
+              alt="thumbnail"
+            />
+            <span>{hed}</span>
           </a>
-        </li>
+        </div>
       {/each}
-    </ul>
-  </section>
+    </section>
+
+    <section class="about">
+      <div class="wordmark">
+        {@html wordmark}
+      </div>
+      <p>
+        <a href="https://pudding.cool">The Pudding</a>
+        is a digital publication that explains ideas debated in culture with visual essays.
+      </p>
+    </section>
+
+    <section class="links">
+      <ul>
+        {#each links as link}
+          <li>
+            <a href={link.url}>
+              <span>{link.name.toUpperCase()}</span>
+            </a>
+          </li>
+        {/each}
+      </ul>
+    </section>
+  </div>
 </footer>
 
 <style>
   footer {
-    background-color: var(--color-fg);
-    color: var(--color-bg);
-    font-family: var(--sans);
-    padding: 3em 1em;
-    margin-top: 3em;
+    background-color: #FFFFFF;
+    color: #000;
+    font-family:'Yantramanav';
+    margin: 1rem auto;
+    border-radius: 10px;
+    box-shadow: 0 0 15px 5px rgba(0,0,0,.15);
+    padding: 1rem;
+
+    max-width: 1300px;
   }
 
   a,
   a:visited,
   a:hover {
-    color: var(--color-bg);
+    color: #000;
+  }
+
+  .wrapper {
+    border: 3px solid black;
+    padding: 1em .5em;
   }
 
   .stories {
@@ -143,6 +156,13 @@
     margin-left: 0.5em;
   }
 
+  .notice {
+    font-size:24px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
   @media only screen and (min-width: 30em) {
     .story {
       width: 50%;
@@ -156,4 +176,17 @@
       padding: 0 1em;
     }
   }
+  @media only screen and (max-width: 500px) {
+    footer {
+      padding: 1em .3em;
+      margin-top: 2em;
+      border-radius: 0px;
+    }
+
+    .wrapper {
+      border: 1px solid black;
+      padding: 1em .5em;
+    }
+  }
+
 </style>

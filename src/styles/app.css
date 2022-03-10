@@ -35,9 +35,40 @@
 .mapboxgl-popup {
 	font-family: 'Yantramanav';
 	font-size: 18px;
+	z-index: 1000;
+	pointer-events: none;
 }
 
 .mapboxgl-popup .mapboxgl-popup-content {
 	box-shadow: 0 0 10px 1px rgba(0,0,0,.10);
 	padding-right: 19px;
+}
+
+.mapboxgl-canvas-container {
+	width:100%;
+	position: relative;
+}
+
+.mapboxgl-canvas-container:before {
+	content: '';
+	padding-top: 57.8910152867%;
+	display: block;
+}
+
+.mapboxgl-popup-anchor-bottom {
+	top: -15px;
+}
+
+.mapboxgl-popup-anchor-right {
+	left: -15px;
+}
+
+.mapboxgl-popup-anchor-left {
+	left: 15px;
+}
+
+@media only screen and (max-width: 500px) {
+	.mapboxgl-popup {
+		display: none;
+	}
 }
