@@ -30,7 +30,7 @@
       </div>
 
       <div class="updates byline">
-        <p>This updates daily, as of March 10</p>
+        <p>This updates daily, as of March 10, 2022.</p>
       </div>
 
       <div class="safety-wrapper">
@@ -81,15 +81,15 @@
       Record-high temperatures are preventable.
     </p>
     <div class="method-small">
-      <p>As the average temperature of the Earth increases, the climate becomes less stable. <a href="https://probablefutures.org/heat/a-tour-of-temperature/">Probable Futures</a> says it well: in a warmer world, the &ldquo;average occurs less frequently, and the extremes are wider.&ldquo;</p>
+      <p>As the average temperature of the Earth increases, the climate becomes less stable. <a href="https://probablefutures.org/heat/a-tour-of-temperature/" target="_blank">Probable Futures</a> says it well: in a warmer world, the &ldquo;average occurs less frequently, and the extremes are wider.&ldquo;</p>
       <p>The organization has a helpful <a href="https://probablefutures.org/heat/a-tour-of-temperature/" target="_blank">example</a> that stresses why seasonal temperature highs are just as important as all-time records, &ldquo;As the earth’s climate has warmed, extremes reached in places that already experience a wide range of temperatures are becoming even more volatile in predictable ways. Since the big change isn’t the amount of energy coming in from the sun, summers are only slightly warmer, while spring, fall, and especially winter are much warmer. It’s less that the Arctic is getting hotter and more that it is losing its cold. For example, the historical average high temperature for December 1 was -15°C (5°F). On December 1, 2020 Fairbanks registered a high temperature of 3.9°C (39°F). &rdquo;</p>
       <p>A New York Times <a href="https://www.nytimes.com/interactive/2022/01/11/climate/record-temperatures-map-2021.html" target="_blank">analysis</a> of heat records found that, &ldquo;Temperatures in the United States [in 2020] set more all-time heat and cold records than any other year since 1994.&rdquo;
     </div>
 
     <div class="desc">
       <p>This updates daily, as of March 10</p>
-      <p>Weather records are collected from <a href="http://www.rcc-acis.org/docs_webservices.html">ACIS</a>, which tracks weather for approximately 400 U.S. cities. ACIS has data from the <a href="http://threadex.rcc-acis.org/">ThreadEx</a> project: &ldquo;ThreadEx is a project designed to address the fragmentation of station information over time due to station relocations for the express purpose of calculating daily extremes of temperature and precipitation. There are often changes in the siting of instrumentation for any given National Weather Service/Weather Bureau location over the observational history in a given city/region. As a result, obtaining a long time series (i.e., one hundred years or more) for computation of extremes is difficult, unless records from the various locations are "threaded" or put together. This has been done, but different approaches and combinations of stations have resulted in confusion among data users and the general public about what constitutes an official daily extreme record.&rdquo;</p>
-      <p>You can browse this data on <a href="http://threadex.rcc-acis.org/">Threaded Extremes.</a></p>
+      <p>Temperature records are collected from <a href="http://www.rcc-acis.org/docs_webservices.html" target="_blank">ACIS</a>, which tracks weather for approximately 400 U.S. cities. ACIS has data from the <a href="http://threadex.rcc-acis.org/" target="_blank">ThreadEx</a> project: &ldquo;ThreadEx is a project designed to address the fragmentation of station information over time due to station relocations for the express purpose of calculating daily extremes of temperature and precipitation. There are often changes in the siting of instrumentation for any given National Weather Service/Weather Bureau location over the observational history in a given city/region. As a result, obtaining a long time series (i.e., one hundred years or more) for computation of extremes is difficult, unless records from the various locations are 'threaded' or put together. This has been done, but different approaches and combinations of stations have resulted in confusion among data users and the general public about what constitutes an official daily extreme record.&rdquo;</p>
+      <p>You can browse this data on <a href="http://threadex.rcc-acis.org/" target="_blank">Threaded Extremes.</a></p>
     </div>
   </div>
 </div>
