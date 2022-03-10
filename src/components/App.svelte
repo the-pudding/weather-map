@@ -28,6 +28,11 @@
       <div class="byline">
         <p>NOTICE from management at <a href="/">The Pudding</a></p>
       </div>
+
+      <div class="updates byline">
+        <p>This updates daily, as of March 10</p>
+      </div>
+
       <div class="safety-wrapper">
         <div class="safety">
           <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,7 +45,9 @@
             <rect x="0.516846" y="14.9941" width="7.13201" height="22.1437" transform="rotate(-90 0.516846 14.9941)" fill="white"/>
           </svg>
         </div>
-        <p class="highlight">Record-HIGH TEMPERATURES are avoidable!</p>
+        <p class="highlight">Safety First!</p>
+
+        <!-- <p class="highlight">Record-HIGH TEMPERATURES are preventable!</p> -->
       </div>
       
       <img src="assets/images/sweat.png" alt="icon of person sweating" />
@@ -49,7 +56,7 @@
     </div>
     <div class="top-bar">
       <div class="top-title">
-        <p class="left">This country has gone</p>
+        <p class="left">The U.S. has gone</p>
         <div class="led">
           <p class="led-fg">{+least.days_since_daily < 100 ? "0".concat(least.days_since_daily) : least.days_since_daily} days</p>
           <p class="led-bg">
@@ -57,7 +64,7 @@
           </p>
         </div>
         <!-- <p class="right">since A city SET a record daily temperature high</p> -->
-        <p class="right">without a city setting a record daily temperature high</p>
+        <p class="right">without a city breaking a record daily temperature high</p>
       </div>
     </div>
   </div>
@@ -71,11 +78,17 @@
   </div>
   <div class="method">
     <p class="method-big">
-      Report all records to your supervisor.
+      Record-high temperatures are preventable.
     </p>
+    <div class="method-small">
+      <p>As the average temperature of the Earth increases, the climate becomes less stable. <a href="https://probablefutures.org/heat/a-tour-of-temperature/">Probable Futures</a> says it well: in a warmer world, &ldquo;average occurs less frequently, and the extremes are wider.&ldquo;</p>
+      <p>The organization has a helpful <a href="https://probablefutures.org/heat/a-tour-of-temperature/" target="_blank"></a> to stress why seasonal temperature highs are just as important as all-time records, &ldquo;As the earth’s climate has warmed, extremes reached in places that already experience a wide range of temperatures are becoming even more volatile in predictable ways. Since the big change isn’t the amount of energy coming in from the sun, summers are only slightly warmer, while spring, fall, and especially winter are much warmer. It’s less that the Arctic is getting hotter and more that it is losing its cold. For example, the historical average high temperature for December 1 was -15°C (5°F). On December 1, 2020 Fairbanks registered a high temperature of 3.9°C (39°F). &rdquo;</p>
+      <p>A New York Times <a href="https://www.nytimes.com/interactive/2022/01/11/climate/record-temperatures-map-2021.html" target="_blank">analysis</a> of heat records found that, &ldquo;Temperatures in the United States [in 2020] set more all-time heat and cold records than any other year since 1994.&rdquo;
+    </div>
+
     <div class="desc">
-      <p>This project updates daily.</p>
-      <p>Weather records are collected from <a href="http://www.rcc-acis.org/docs_webservices.html">ACIS</a>, which uses &ldquo;threaded&rdquo; records for approximately 400 U.S. cities. Proximate weather stations are combined to give a historic record for a particular city (weather stations are often decommissioned and moved to different locations).</p>
+      <p>This updates daily, as of March 10</p>
+      <p>Weather records are collected from <a href="http://www.rcc-acis.org/docs_webservices.html">ACIS</a>, which tracks weather for approximately 400 U.S. cities. ACIS has data from the <a href="http://threadex.rcc-acis.org/">ThreadEx</a> project: &ldquo;ThreadEx is a project designed to address the fragmentation of station information over time due to station relocations for the express purpose of calculating daily extremes of temperature and precipitation. There are often changes in the siting of instrumentation for any given National Weather Service/Weather Bureau location over the observational history in a given city/region. As a result, obtaining a long time series (i.e., one hundred years or more) for computation of extremes is difficult, unless records from the various locations are "threaded" or put together. This has been done, but different approaches and combinations of stations have resulted in confusion among data users and the general public about what constitutes an official daily extreme record.&rdquo;</p>
       <p>You can browse this data on <a href="http://threadex.rcc-acis.org/">Threaded Extremes.</a></p>
     </div>
   </div>
@@ -99,10 +112,26 @@
   .method-big {
     font-size: 36px;
     font-weight: 700;
+    margin-bottom: 1rem;
   }
 
   .method .desc {
     display: block;
+  }
+
+  .method .desc p {
+    line-height: 1.4;
+  }
+
+  .method-small {
+    margin-bottom: 1rem;
+  }
+
+  .method-small p {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    line-height: 1.3;
   }
 
   .desc p {
@@ -116,9 +145,11 @@
   }
   .top-bar-wrapper {
     display: flex;
+    flex-wrap: wrap;
     position: relative;
     width: 100%;
   }
+
   .notice-bar {
     display: flex;
     background: white;
@@ -127,6 +158,13 @@
     padding-left: 1rem;
     min-width: 380px;
     position: relative;
+
+    width: 100%;
+    border: none;
+    justify-content: center;
+    height: 80px;
+    padding: 0;
+
   }
 
   .notice-bar p {
@@ -144,6 +182,7 @@
     margin-top: 4px;
     justify-content: center;
     max-width: 270px;
+    display: none;
   }
 
   .safety svg {
@@ -158,20 +197,37 @@
   }
 
   .notice-bar .byline {
-    display: none;
+    /* display: none; */
+    align-self: center;
+    position: absolute;
+    left: 0;
+    max-width: 200px;
+    display: block;
+
+    
+  }
+
+  .notice-bar .updates {
+    right: 0;
+    left: auto;
+    text-align: right;
   }
 
   .notice-bar img{
     width: 112px;
     position: absolute;
     right: 0;
+    display: none;
   }
+  
   .byline {
     text-align: center;
     text-transform: uppercase;
     font-weight: 600;
     font-size: 15px;
     margin-bottom: .5rem;
+
+    
   }
 
   
@@ -230,6 +286,18 @@
     text-align: center;
     margin: 0 auto;
     margin-top:5px;
+
+    background: black;
+    display: inline-block;
+    color: white;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: 600;
+    padding: .3rem 1.5rem;
+    align-self: center;
+    letter-spacing: 2px;
+    width: auto;
+    margin: 0;
   }
 
   .top-bar p {
@@ -242,14 +310,25 @@
     text-align: right;
     font-size: 28px;
     padding-left: 1rem;
-    max-width: 200px;
+    /* max-width: 200px; */
+
+    font-size: 30px;
+    line-height: 1;
+    padding: 0;
   }
 
   .top-bar .right {
     text-align: left;
     font-size: 20px;
-    max-width: 270px;
+    /* max-width: 270px; */
     line-height: 1.1;
+
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  .top-bar .right, .top-bar .left {
+       width: calc(50% - 180px);
   }
 
   .top-bar .led p {
@@ -296,8 +375,7 @@
     margin: 0 auto;
     z-index: 1000;
     width: 100%;
-    pointer-events: all;
-
+    pointer-events: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -320,81 +398,77 @@
     padding-top: 1.5rem;
     /* transform: translate(0,20px); */
   }
-
-  @media only screen and (max-width: 1300px) {
-    .top-bar-wrapper {
-      flex-wrap: wrap;
-    }
-    .notice-bar {
-      width: 100%;
-      border: none;
-      justify-content: center;
-      height: 80px;
-      padding: 0;
-    }
-
-    .notice-bar img {
+  .byline-top {
       display: none;
-    }
+  }
 
-    .top-bar .right {
-      font-size: 22px;
-      line-height: 1.3;
-      max-width: none;
-    }
+  .top-bar-wrapper {
+    flex-wrap: wrap;
+  }
+  .notice-bar {
+    width: 100%;
+    border: none;
+    justify-content: center;
+    height: 80px;
+    padding: 0;
+  }
 
-    .top-bar .left {
-      font-size: 30px;
-      line-height: 1;
-      padding: 0;
-      max-width: none;
-    }
+  .notice-bar img {
+    display: none;
+  }
 
-    p.highlight {
-      background: black;
-      display: inline-block;
-      color: white;
-      border-radius: 10px;
-      font-size: 22px;
-      font-weight: 600;
-      padding: .3rem 1.5rem;
-      align-self: center;
-      letter-spacing: 2px;
-      width: auto;
-      margin: 0;
-    }
+  .top-bar .right {
+    font-size: 22px;
+    line-height: 1.3;
+    max-width: none;
+  }
 
-    .safety-wrapper {
-      align-self: center;
-    }
+  .top-bar .left {
+    font-size: 30px;
+    line-height: 1;
+    padding: 0;
+    max-width: none;
+  }
 
-    .notice-bar .byline {
-      align-self: center;
-      position: absolute;
-      left: 0;
-      max-width: 200px;
-      display: block;
-      
-    }
+  p.highlight {
+    background: black;
+    display: inline-block;
+    color: white;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: 600;
+    padding: .3rem 1.5rem;
+    align-self: center;
+    letter-spacing: 2px;
+    width: auto;
+    margin: 0;
+  }
 
-    .notice-bar .byline p {
-      font-size: 15px;
-      line-height: 1.2;
-      font-weight:600;
-      text-align: left;
-    }
+  .safety-wrapper {
+    align-self: center;
+  }
 
-    .top-bar .right, .top-bar .left {
-       width: calc(50% - 180px);
-    }
+  .notice-bar .byline p {
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight:600;
+    text-align: left;
+  }
 
-    .safety {
-      display: none;
-    }
+  .notice-bar .updates p {
+    text-align: right;
+  }
 
-    .byline-top {
-      display: none;
-    }
+  .top-bar .right, .top-bar .left {
+      width: calc(50% - 180px);
+  }
+
+  .safety {
+    display: none;
+  }
+
+  .byline-top {
+    display: none;
   }
 
   @media only screen and (max-width: 1150px) {
@@ -489,23 +563,24 @@
   @media only screen and (max-width: 500px) {
 
     .method {
-      background: white;
+      /* background: white; */
       border-width: 1px;
     }
 
     .method p, .method a {
       color: black;
+      color: white;
     }
 
     .method-big {
-      font-size: 18px;
+      font-size: 24px;
       margin-bottom: 1rem;
+      line-height: 1.1;
     }
 
     .method .desc p {
       font-size: 12px;
       margin-bottom: .5rem;
-      line-height: 1.1;
     }
 
     .byline {
@@ -516,6 +591,7 @@
       position: relative;
       width:calc(100% - 10px);
       margin: 0 auto;
+      pointer-events: none;
     }
 
     .map-wrapper {
@@ -530,6 +606,7 @@
       font-weight: 600;
       max-width: 200px;
       margin-bottom: -20px;
+      pointer-events: none;
     }
 
     .wrapper {
@@ -539,7 +616,7 @@
       padding: .3rem;
     }
 
-    p.highlight {
+    /* p.highlight {
       line-height: 1.1;
       font-weight: 900;
       width: 100%;
@@ -547,6 +624,13 @@
       color: black;
       letter-spacing: 0;
       font-size: 25px;
+    } */
+
+    p.highlight {
+      line-height: 1.1;
+      font-weight: 900;
+      width: 100%;
+      font-size: 22px;
     }
     .notice-bar {
       margin-bottom: 1rem;

@@ -15,15 +15,12 @@
 	export let lon;
 	export let zoom;
 
-    let mapWidth = 0;
-
-
     const formatTime = timeFormat("%B %d, %Y");
     const formatTimeNoYear = timeFormat("%B %d");
     let popupData = least;
 
-    $: w = Math.min(mapWidth, $viewport.width) * 0.8;
-    $: h = Math.min(mapWidth, $viewport.height) * 0.8;
+    $: w = $viewport.width;
+    $: h = $viewport.height;
     $: popupDataDate = new Date(popupData.days_since_daily_date.slice(0,4), +popupData.days_since_daily_date.slice(5,7) -1, popupData.days_since_daily_date.slice(8,10));
 
     let layers = [
@@ -45,6 +42,12 @@
             [-22.275411,-13.090124],
             [20.68255,12.703398]
     ];
+
+    const maxBounds = [
+            [-30.275411,-20.090124],
+            [27.68255,20.703398]
+    ];
+
 
     let center = [-0.7964304999999996,-0.19336299999999973];
 
@@ -73,26 +76,29 @@
         })
 
         let popup = null;
+        let padding = 0;
+        let navPosition = 'top-right';
+        let scrollZoom = false;
+        if(w < 500) {
+            padding = 0;
+            navPosition = 'bottom-right';
+            scrollZoom = true;
+        }
 
         if(!map){
             map = new mapbox.Map({
                 container,
                 style: 'mapbox://styles/dock4242/cl0bhzae7000y14utgxgy71f1', //'mapbox://styles/dock4242/cl0banu3w000i14l8w1woe65r',
-                // // maxBounds: bounds,
+                maxBounds: maxBounds,
                 center: center,//[-95.973515, 38.382024],//,
                 zoom: 7,
-                scrollZoom: false
+                scrollZoom: scrollZoom
 		    });
 
         }
 		
 
-        let padding = 0;
-        let navPosition = 'top-right';
-        if(w < 500) {
-            padding = 0;
-            navPosition = 'bottom-right';
-        }
+        
 
         
 
@@ -108,6 +114,10 @@
             if(sizeControlLength == 0){
                 map.addControl(new mapbox.AttributionControl(), 'top-left');
                 map.addControl(new mapbox.NavigationControl({visualizePitch:false, showCompass: false}), navPosition);
+            }
+
+            if(w < 500){
+                map.scrollZoom.disable();
             }
 
             
@@ -183,15 +193,26 @@
             map.setPaintProperty('acis-reproj-7ytdey', 'text-color', "#000000");
             map.setPaintProperty('state-boundaries copy', 'fill-color', "#e8e8e8");
 
-
             map.setLayoutProperty('acis-reproj-7ytdey-top-layer', 'text-field', matchExpression);
+            map.setLayoutProperty('acis-reproj-7ytdey-top-layer-mobile', 'text-field', matchExpression);
             map.setLayoutProperty('acis-reproj-7ytdey-mid-layer', 'text-field', matchExpression);
             map.setLayoutProperty('acis-reproj-7ytdey', 'text-field', matchExpression);
+            console.log(w)
+            if(w < 500) {
+                
+                map.setLayoutProperty('acis-reproj-7ytdey-top-layer', 'visibility', "none");
+                map.setLayoutProperty('acis-reproj-7ytdey-top-layer-mobile', 'visibility', "visible");
+            }
+            else {
+                map.setLayoutProperty('acis-reproj-7ytdey-top-layer', 'visibility', "visible");
+                map.setLayoutProperty('acis-reproj-7ytdey-top-layer-mobile', 'visibility', "none");
+            }
 
             map.setLayoutProperty('acis-reproj-7ytdey-mid-layer', 'text-size', sizeExpression);
             map.setLayoutProperty('acis-reproj-7ytdey', 'text-size', sizeExpression);
 
             map.setFilter('acis-reproj-7ytdey-top-layer', [ "all", [ "match", ["get", "station"], [least.station], true, false ] ]);
+            map.setFilter('acis-reproj-7ytdey-top-layer-mobile', [ "all", [ "match", ["get", "station"], [least.station], true, false ] ]);
             map.setFilter('acis-reproj-7ytdey-mid-layer', [ "all", [ "match", ["get", "station"], stationsMid, true, false ] ]);
             map.setFilter('acis-reproj-7ytdey', [ "all", [ "match", ["get", "station"], stationsBase, true, false ] ]);
 
@@ -201,7 +222,7 @@
             if(!popup) {
 
                 popup = new mapbox.Popup({ focusAfterOpen: false, maxWidth: '340px' });
-
+                popup.addClassName('last-record');
                 popup
                     .setLngLat([least.longitude,least.latitude])
                     //.setHTML("hi")
@@ -241,19 +262,7 @@
                 if(displayFeatures.length > 0 && popupAdded){
 
                     popupData = displayFeatures[0].properties;
-
-                    // if (hoveredStation !== null) {
-                    //     map.setFeatureState(
-                    //         { source: 'acis-reproj-7ytdey', id: hoveredStation },
-                    //         { hover: false }
-                    //     );
-                    // }
-
-                    // hoveredStation = popupData.station;
-                    // map.setFeatureState(
-                    //     { source: 'acis-reproj-7ytdey', id: hoveredStation },
-                    //     { hover: true }
-                    // );
+                    console.log(popupData.station)
 
                     if(hoveredStation !== popupData.station){
                         popup.remove();
@@ -264,7 +273,7 @@
                         });
 
                         hoveredStation = stationIds.indexOf(popupData.station);
-
+                        console.log(hoveredStation)
 
 
                         map.setFeatureState({
@@ -277,7 +286,18 @@
 
 
                         // map.setFilter('circles', [ "all", [ "match", ["get", "station"], [popupData.station], true, false ] ]);
-                        console.log("circling")
+                        console.log("circling",popupData.station,least.station)
+
+
+
+                        if(popupData.station == least.station){
+                            popup.addClassName('last-record');
+                            popup.removeClassName('not-last-record');
+                        }
+                        else {
+                            popup.removeClassName('last-record');
+                            popup.addClassName('not-last-record');
+                        }
 
                         popup
                             .setLngLat([popupData.longitude,popupData.latitude])
