@@ -71,6 +71,9 @@
 	left: 35px;
 }
 
+.android-adjust {
+	transform: translate(0,-11px);
+}
 
 .not-last-record.mapboxgl-popup-anchor-bottom {
 	top: -15px;

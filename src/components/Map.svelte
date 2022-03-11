@@ -23,6 +23,8 @@
     $: h = $viewport.height;
     $: popupDataDate = new Date(popupData.days_since_daily_date.slice(0,4), +popupData.days_since_daily_date.slice(5,7) -1, popupData.days_since_daily_date.slice(8,10));
 
+
+
     let layers = [
         "daily","daily-days","monthly","alltime"
     ]
@@ -226,7 +228,7 @@
                 popup
                     .setLngLat([least.longitude,least.latitude])
                     //.setHTML("hi")
-                    .setHTML(`${least.days_since_daily} days ago, it was ${least.days_since_val}°F in <b>${least.name}, ${least.state_abbr}</b> on <b>${formatTime(leastDate)}</b>. That is the hottest ${formatTimeNoYear(leastDate)} on record for the city.`)
+                    .setHTML(`${least.days_since_daily} days ago, it was ${least.days_since_val}°F in <b>${least.name.replace(" Area","")}, ${least.state_abbr} area</b> on <b>${formatTime(leastDate)}</b>. That is the hottest ${formatTimeNoYear(leastDate)} on record for the city.`)
                     .addTo(map);
 
                 popupAdded = true;
@@ -301,7 +303,7 @@
 
                         popup
                             .setLngLat([popupData.longitude,popupData.latitude])
-                            .setHTML(`${popupData.days_since_daily} days ago, it was ${popupData.days_since_val}°F in <b>${popupData.name}, ${popupData.state_abbr}</b> on <b>${formatTime(popupDataDate)}</b>, the hottest ${formatTimeNoYear(popupDataDate)} on record for the city.`)
+                            .setHTML(`${popupData.days_since_daily} days ago, it was ${popupData.days_since_val}°F in <b>${popupData.name.replace(" Area","")}, ${popupData.state_abbr} area</b> on <b>${formatTime(popupDataDate)}</b>, the hottest ${formatTimeNoYear(popupDataDate)} on record for the city.`)
                             .addTo(map)
                     }
                 }

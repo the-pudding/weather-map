@@ -40,6 +40,7 @@
 	"dependencies": {
 		"geo-albers-usa-territories": "^0.1.0",
 		"http-server": "^14.1.0",
-		"mapbox-gl": "^2.7.0"
+		"mapbox-gl": "^2.7.0",
+		"svelte-device-info": "^1.0.0"
 	}
 }
