@@ -3,22 +3,48 @@
   import WIP from "$components/helpers/WIP.svelte";
   import Map from '$components/Map.svelte';
   import data from '$data/acis-agg-3.csv'
-  import { select, minIndex } from "d3";
+  import { select, minIndex, timeFormat } from "d3";
   import Footer from "$components/Footer.svelte";
+  import DatasetSelect from '$components/DatasetSelect.svelte';
   import { onMount } from "svelte";
-
+  import Select from "$components/helpers/Select.svelte";
+  
   onMount(async () => {
     if(window.navigator.userAgent.match(/Android/i)){
       select(".led-fg").classed("android-adjust",true);
       select(".led-bg").classed("android-adjust",true);
     }
+
   })
   
+  function setString(dataPoint){
+    if(dataType == "all-time"){
+        return +dataPoint.all_time_days < 100 ? "0".concat(dataPoint.all_time_days) : dataPoint.all_time_days  
+    }
+    return +dataPoint.days_since_daily < 100 ? "0".concat(dataPoint.days_since_daily) : dataPoint.days_since_daily
+  }
 
+  let dataType = "all-time"
+  const selectOptions = [
+    { value: "daily" },
+    { value: "all-time" }
+  ];
 
-  let leastIndex = minIndex(data, d => +d['days_since_daily']);
+  let formatDate = timeFormat("%B %d, %Y")
 
-  let least = data[leastIndex];
+  let last = data[0].last_data_point;
+  let lastDate = formatDate(new Date(last.slice(0,4), +last.slice(4,6) -1, last.slice(6,8)));
+
+  $: leastIndex = minIndex(data, d => {
+    if(dataType == "daily"){
+      return +d["days_since_daily"]
+    }
+    return +d["all_time_days"];
+  });
+
+  $: least = data[leastIndex];
+
+  $: ledString = setString(least);
 
 </script>
 
@@ -40,7 +66,7 @@
       </div>
 
       <div class="updates byline">
-        <p>This updates daily, as of March 10, 2022.</p>
+        <p>This updates daily, as of {lastDate}.</p>
       </div>
 
       <div class="safety-wrapper">
@@ -64,26 +90,27 @@
 
       
     </div>
+
     <div class="top-bar">
       <div class="top-title">
         <p class="left">The U.S. has gone</p>
         <div class="led">
-          <p class="led-fg">{+least.days_since_daily < 100 ? "0".concat(least.days_since_daily) : least.days_since_daily} days</p>
+          <p class="led-fg">{ledString} days</p>
           <p class="led-bg">
             888 8888
           </p>
         </div>
         <!-- <p class="right">since A city SET a record daily temperature high</p> -->
-        <p class="right">without a city breaking a record daily temperature high</p>
+        <p class="right">without a city breaking a record {dataType == "all-time" ? "an" : "a"} <span class="select-wrapper"><Select label={"time-frame"} options={selectOptions} bind:value={dataType} selectClass="notice-title" /></span> temperature high</p>
       </div>
     </div>
   </div>
   
   <div class="map-wrapper">
     <div class="map-title">
-      <p class="">Days without a Daily Record High Temperature</p>
+      <p class="">{dataType == "all-time" ? "Time since" : "Days without"} {dataType == "all-time" ? "an" : "a"} <span class="select-wrapper"><Select label={"time-frame"} options={selectOptions} bind:value={dataType} selectClass="map-title" /></span> Record High Temperature</p>
     </div>
-    <Map lat={35} lon={-84} zoom={3.5} data={data} least={least}>
+    <Map lat={35} lon={-84} zoom={3.5} data={data} least={least} timeframe={dataType}>
     </Map>
   </div>
   <div class="method">
@@ -91,22 +118,29 @@
       Record-high temperatures are preventable.
     </p>
     <div class="method-small">
-      <p>As the average temperature of the earth increases, the climate becomes less stable. <a href="https://probablefutures.org/heat/a-tour-of-temperature/" target="_blank">Probable Futures</a> says it well: in a warmer world, the &ldquo;average occurs less frequently, and the extremes are wider.&ldquo;</p>
-      <p>The organization has a helpful <a href="https://probablefutures.org/heat/a-tour-of-temperature/" target="_blank">example</a> that stresses why seasonal temperature highs are just as important as all-time records, &ldquo;As the earth’s climate has warmed, extremes reached in places that already experience a wide range of temperatures are becoming even more volatile in predictable ways. Since the big change isn’t the amount of energy coming in from the sun, summers are only slightly warmer, while spring, fall, and especially winter are much warmer. It’s less that the Arctic is getting hotter and more that it is losing its cold. For example, the historical average high temperature for December 1 was -15°C (5°F). On December 1, 2020 Fairbanks [Alaska] registered a high temperature of 3.9°C (39°F).&rdquo;</p>
-      <p>A New York Times <a href="https://www.nytimes.com/interactive/2022/01/11/climate/record-temperatures-map-2021.html" target="_blank">analysis</a> of heat records found that, &ldquo;Temperatures in the United States [in 2020] set more all-time heat and cold records than any other year since 1994.&rdquo;
+
+      <p>This project juxtoposes heat records with accident safety signage often displayed in factories. These &ldquo;scoreboards&rdquo; draw attention injuries and build morale around safety by highlighting &ldquo;days since last injury.&rdquo;</p>
+
+      <p>This map depicts temperature records in a similar design aesthetic: temperature records might seem &ldquo;unprecedented,&rdquo; but in reality occur nearly everyday. Specifically, &ldquo;daily high&ldquo; records show that never-before-seen warm days are occurring year-round, not just in the heat of the summer months.</p>
+      <p>Or as Probable Futures <a href="https://probablefutures.org/heat/a-tour-of-temperature/" target="_blank">reports</a>, &ldquo;Since the big change isn’t the amount of energy coming in from the sun, summers are only slightly warmer, while spring, fall, and especially winter are much warmer. It’s less that the Arctic is getting hotter and more that it is <b>losing its cold</b>.&rdquo;</p>
+      <p>Global warming is creating these conditions. As environmental data scientist Dr. Robert Rohde <a href="https://www.nytimes.com/interactive/2022/01/11/climate/record-temperatures-map-2021.html" target="_blank">told the New York Times</a>, “What were hot days in the past are becoming more common. What were very, very hot days in the past are now two or three times more common than they used to be.”</p>
     </div>
 
     <div class="desc">
-      <p>This updates daily, as of March 10</p>
+      <p><b>MORE ABOUT THIS DATA</b></p>
+      <p>This updates daily, as of {lastDate}</p>
       <p>Temperature records are collected from <a href="http://www.rcc-acis.org/docs_webservices.html" target="_blank">ACIS</a>, which tracks weather for approximately 400 U.S. cities. ACIS has data from the <a href="http://threadex.rcc-acis.org/" target="_blank">ThreadEx</a> project: &ldquo;ThreadEx is a project designed to address the fragmentation of station information over time due to station relocations for the express purpose of calculating daily extremes of temperature and precipitation. There are often changes in the siting of instrumentation for any given National Weather Service/Weather Bureau location over the observational history in a given city/region. As a result, obtaining a long time series (i.e., one hundred years or more) for computation of extremes is difficult, unless records from the various locations are 'threaded' or put together...In consultation with NOAA's National Centers for Environmental Information (NCEI) and the National Weather Service (NWS), the Northeast Regional Climate Center (NRCC) has evaluated station relocations and built "threads" for 270 locations that are published in NCEI's Local Climatological Data using NOAA daily data sets.&rdquo;</p>
       <p>You can browse this data on <a href="http://threadex.rcc-acis.org/" target="_blank">Threaded Extremes.</a></p>
     </div>
   </div>
 </div>
 
-
-
 <style>
+
+  .select-wrapper {
+    pointer-events: all;
+    display: inline-block;
+  }
 
   .method {
     border: 3px solid black;
@@ -127,6 +161,7 @@
 
   .method .desc {
     display: block;
+    margin-top: 3rem;
   }
 
   .method .desc p {
@@ -138,7 +173,7 @@
   }
 
   .method-small p {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
     margin-bottom: 1rem;
     line-height: 1.3;
@@ -539,6 +574,11 @@
     .top-title {
       flex-wrap: wrap;
     }
+
+    .map-title p {
+      font-size: 18px;
+    }
+
     .top-bar .right {
       font-size: 18px;
       width: 100%;
@@ -572,6 +612,10 @@
 
   @media only screen and (max-width: 500px) {
 
+    .top-bar {
+      padding-right: 5px;
+    }
+
     .method {
       /* background: white; */
       border-width: 1px;
@@ -589,7 +633,7 @@
     }
 
     .method .desc p {
-      font-size: 12px;
+      font-size: 16px;
       margin-bottom: .5rem;
     }
 
@@ -612,11 +656,12 @@
       letter-spacing: 0;
       text-transform: none;
       padding-top: .8rem;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
-      max-width: 200px;
       margin-bottom: -20px;
       pointer-events: none;
+      line-height: .4rem;
+      text-align: left;
     }
 
     .wrapper {
@@ -647,12 +692,19 @@
       margin-top: .4rem;
       min-width: auto;
     }
+
+    .top-bar .right {
+      padding: 0px;
+      padding-top: 10px;
+    }
+  }
+
+  @media only screen and (max-width: 350px) {
+    .top-bar .right {
+      font-size: 16px;
+    }
   }
 
 </style>
-
-<!-- <WIP /> -->
-<!-- <Demo /> -->
-
 
 <Footer />

@@ -1,13 +1,14 @@
 <script>
   export let options = [];
   export let label = "";
+  export let selectClass = "";
   export let disabled = false;
   export let value = options.length ? options[0].value : "";
 
   const id = `select-${Math.floor(Math.random() * 1000000)}`;
 </script>
 
-<div class="select">
+<div class="select {selectClass}">
   {#if label}
     <label for={id}>{label}</label>
   {/if}
@@ -19,8 +20,40 @@
 </div>
 
 <style>
+
+
   .select {
     position: relative;
+  }
+
+
+  select {
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+  }
+
+  .map-title label{
+    font-size: 14px;
+  }
+
+  .map-title {
+    font-size: inherit;
+    padding: 0rem;
+    font-weight: 700;
+  }
+
+  .map-title select {
+    background: white;
+    color: black;
+    border: 2px solid var(--color-gray-900);
+    padding: .2em;
+    padding-left: .5em;
+    appearance: none;
+    line-height: 1.4;
+    text-transform: uppercase;
+    font-weight: 700;
   }
 
   label {
@@ -31,44 +64,56 @@
     margin-bottom: 0.25em;
   }
 
-  select {
-    width: 100%;
-    height: 50px;
-    font-family: inherit;
-    font-size: 1em;
-    cursor: pointer;
-    background: var(--color-white);
-    color: var(--color-gray-900);
-    border: 2px solid var(--color-gray-900);
-    border-radius: 4px;
-    padding: 0.5em;
-    appearance: none;
-    line-height: 1.4;
-  }
 
   select::-ms-expand {
     display: none;
   }
 
+  .notice-title label {
+    display: none;
+  }
+
+  
+
   .select::after {
     display: block;
     content: "";
     position: absolute;
-    bottom: 1.25em;
     right: 0.75em;
-    width: 1em;
-    height: 1em;
+    width: .5em;
+    height: .5em;
     z-index: 1;
     background: var(--color-gray-900);
     clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
-    border-radius: 4px;
     transform-origin: center center;
     transform: rotate(-45deg);
     pointer-events: none;
+    bottom: 1em;
+  }
+
+
+  .notice-title select {
+    background: #444;
+    color: white;
+    padding: .2em;
+    padding-left: .5em;
+    appearance: none;
+    line-height: 1.4;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding-right: 2em;
+  }
+  .notice-title::after {
+    background: #b1a7a7;
+    bottom: .9em;
   }
 
   select:hover {
     background: var(--color-gray-100);
+  }
+
+  .notice-title select:hover {
+    background: #444;
   }
 
   select:focus {
@@ -78,5 +123,23 @@
   .select:disabled {
     cursor: not-allowed;
     background-color: var(--color-gray-300);
+  }
+
+  @media only screen and (max-width: 500px) {
+    label {
+      display: none;
+    }
+
+    .map-title select {
+      padding-right: 2em;
+      font-size: 16px;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-width: 1px;
+    }
+
+    .select::after {
+      bottom: .7em;
+    }
   }
 </style>
