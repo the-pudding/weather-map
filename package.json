@@ -35,7 +35,7 @@
 	},
 	"browserslist": "> 0.5%, last 4 versions, not ie <= 11, not ie_mob <= 11",
 	"svelteStarter": {
-		"subdirectory": "weather-map"
+		"subdirectory": "2022/03/weather-map"
 	},
 	"dependencies": {
 		"geo-albers-usa-territories": "^0.1.0",
