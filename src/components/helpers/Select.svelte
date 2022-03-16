@@ -36,6 +36,11 @@
 
   .map-title label{
     font-size: 14px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: translate(0,-100%);
   }
 
   .map-title {
@@ -54,6 +59,7 @@
     line-height: 1.4;
     text-transform: uppercase;
     font-weight: 700;
+    padding-right: 2em;
   }
 
   label {

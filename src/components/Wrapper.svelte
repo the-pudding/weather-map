@@ -108,7 +108,7 @@
             </p>
           </div>
           <!-- <p class="right">since A city SET a record daily temperature high</p> -->
-          <p class="right">without a city breaking a record {dataType == "all-time" ? "an" : "a"} <span class="select-wrapper"><Select label={"time-frame"} options={selectOptions} bind:value={dataType} selectClass="notice-title" /></span> temperature high</p>
+          <p class="right">without a city breaking a record <span class="select-wrapper"><Select label={"time-frame"} options={selectOptions} bind:value={dataType} selectClass="notice-title" /></span> temperature high</p>
         </div>
       </div>
     </div>
@@ -128,7 +128,7 @@
   
         <p>This project juxtoposes heat records with accident safety signage often displayed in factories. These &ldquo;scoreboards&rdquo; draw attention to injuries and build morale around safety by highlighting &ldquo;days since last injury.&rdquo;</p>
   
-        <p>This map depicts temperature records in a similar design aesthetic: temperature records might seem &ldquo;unprecedented,&rdquo; but in reality occur nearly every few weeks. Specifically, &ldquo;daily high&ldquo; records show that never-before-seen warm days are occurring year-round, not just in the heat of the summer months.</p>
+        <p>This map depicts temperature records in a similar design aesthetic: temperature records might seem &ldquo;unprecedented,&rdquo; but in reality occur nearly every few weeks. Specifically, &ldquo;daily high&rdquo; records show that never-before-seen warm days are occurring year-round, not just in the heat of the summer months.</p>
         <p>Or as Probable Futures <a href="https://probablefutures.org/heat/a-tour-of-temperature/" target="_blank">reports</a>, &ldquo;Since the big change isn’t the amount of energy coming in from the sun, summers are only slightly warmer, while spring, fall, and especially winter are much warmer. It’s less that the Arctic is getting hotter and more that it is <b>losing its cold</b>.&rdquo;</p>
         <p>Climate change is creating these conditions. As environmental data scientist Dr. Robert Rohde <a href="https://www.nytimes.com/interactive/2022/01/11/climate/record-temperatures-map-2021.html" target="_blank">told the New York Times</a>, “What were hot days in the past are becoming more common. What were very, very hot days in the past are now two or three times more common than they used to be.”</p>
       </div>
@@ -525,7 +525,7 @@
   
     @media only screen and (max-width: 1150px) {
       .top-bar .right {
-        font-size: 20px;
+        font-size: 18px;
       }
   
       .top-bar .left {

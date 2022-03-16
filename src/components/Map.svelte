@@ -109,10 +109,12 @@
     let padding = {top:50};
     let navPosition = 'top-right';
     let scrollZoom = false;
+    let initialZoom = 4;
     if(w < 500) {
         padding = 0;
         navPosition = 'bottom-right';
         scrollZoom = true;
+        initialZoom = 3;
     }
 
 	function load(dataPoint) {
@@ -140,7 +142,7 @@
                 style: 'mapbox://styles/dock4242/cl0bhzae7000y14utgxgy71f1', //'mapbox://styles/dock4242/cl0banu3w000i14l8w1woe65r',
                 maxBounds: maxBounds,
                 center: center,//[-95.973515, 38.382024],//,
-                zoom: 7,
+                zoom: initialZoom,
                 scrollZoom: scrollZoom
 		    });
         }
@@ -151,7 +153,7 @@
                 style: 'mapbox://styles/dock4242/cl0bhzae7000y14utgxgy71f1', //'mapbox://styles/dock4242/cl0banu3w000i14l8w1woe65r',
                 maxBounds: maxBounds,
                 center: center,//[-95.973515, 38.382024],//,
-                zoom: 7,
+                zoom: initialZoom,
                 scrollZoom: scrollZoom
 		    });
         }
@@ -353,6 +355,9 @@
             }
 
             map.on('mousemove', (e) => {
+
+                console.log(map.getZoom())
+
                 const features = map.queryRenderedFeatures(e.point);
                 // Limit the number of properties we're displaying for
                 // legibility and performance
