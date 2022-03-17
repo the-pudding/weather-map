@@ -12,15 +12,16 @@
     mapbox.accessToken = 'pk.eyJ1IjoiZG9jazQyNDIiLCJhIjoiY2pjazE5eTM2NDl2aDJ3cDUyeDlsb292NiJ9.Jr__XbmAolbLyzPDj7-8kQ';
 	// set the context here...
 
-	export let lat;
-	export let lon;
-	export let zoom;
+		export let lat;
+		export let lon;
+		export let zoom;
 
     const formatTime = timeFormat("%B %d, %Y");
     const formatTimeNoYear = timeFormat("%B %d");
-    
+
     let popupDataToPass = least;
     let popupString = "hi"
+
     $: w = $viewport.width;
     $: h = $viewport.height;
     // $: popupDataDate = new Date(popupData.days_since_daily_date.slice(0,4), +popupData.days_since_daily_date.slice(5,7) -1, popupData.days_since_daily_date.slice(8,10));
@@ -61,17 +62,17 @@
 
         let sixth = ` ago</b> with a temperature of `
         let dateNoSuffix = new Date(dataToMake.all_time_date.slice(0,4), +dataToMake.all_time_date.slice(5,7) -1, dataToMake.all_time_date.slice(8,10));
-        
+
         if(timeframe == "daily"){
             dateNoSuffix = new Date(dataToMake.days_since_daily_date.slice(0,4), +dataToMake.days_since_daily_date.slice(5,7) -1, dataToMake.days_since_daily_date.slice(8,10));
         }
-        
+
         let seventh = `${dataToMake.all_time_val}°F. That&rsquo;s the hottest temperature on record for the area.`;
 
         if(timeframe == "daily"){
             seventh = `${dataToMake.days_since_val}°F. That&rsquo;s the hottest ${formatTimeNoYear(dateNoSuffix)} on record for the area.`;
         }
-        
+
 
         return first + second + third + fourth + fifth + sixth + seventh;
     }
@@ -110,14 +111,14 @@
     let navPosition = 'top-right';
     let scrollZoom = false;
     let initialZoom = 4;
-    if(w < 500) {
-        padding = 0;
-        navPosition = 'bottom-right';
-        scrollZoom = true;
-        initialZoom = 3;
-    }
 
 	function load(dataPoint) {
+				if(w < 500) {
+		        padding = 0;
+		        navPosition = 'bottom-right';
+		        scrollZoom = true;
+		        initialZoom = 3;
+		    }
 
         let geojson = {
                 "type":"FeatureCollection",
@@ -137,6 +138,8 @@
         })
 
         if(!map){
+
+
             map = new mapbox.Map({
                 container,
                 style: 'mapbox://styles/dock4242/cl0bhzae7000y14utgxgy71f1', //'mapbox://styles/dock4242/cl0banu3w000i14l8w1woe65r',
@@ -286,18 +289,31 @@
             colorExpression.push("red");
             sizeExpression.push(12);
 
-            const stationsMid = data.filter(function(d){
+						let dailyThreshold = 30;
+
+            let stationsMid = data.filter(function(d){
                 if(timeframe == "all-time"){
                     return +d["all_time_days"] < 1000 && d["station"] != least.station;
                 }
-                return +d["days_since_daily"] < 30 && d["station"] != least.station;
+                return +d["days_since_daily"] < dailyThreshold && d["station"] != least.station;
             }).map(d => d.station);
 
-            const stationsBase = data.filter(function(d){
+						if(stationsMid.length == 0){
+							dailyThreshold = 100;
+
+							stationsMid = data.filter(function(d){
+	                if(timeframe == "all-time"){
+	                    return +d["all_time_days"] < 1000 && d["station"] != least.station;
+	                }
+	                return +d["days_since_daily"] < dailyThreshold && d["station"] != least.station;
+	            }).map(d => d.station);
+						}
+
+            let stationsBase = data.filter(function(d){
                 if(timeframe == "all-time"){
                     return +d["all_time_days"] > 999 && d["station"] != least.station;
                 }
-                return +d["days_since_daily"] > 29 && d["station"] != least.station;
+                return +d["days_since_daily"] > (dailyThreshold - 1) && d["station"] != least.station;
             }).map(d => d.station);
 
 
@@ -305,7 +321,7 @@
 
             map.setPaintProperty('acis-reproj-7ytdey-mid-layer', 'text-color', colorExpression);
             map.setPaintProperty('acis-reproj-7ytdey', 'text-color', colorExpression);
-            
+
             map.setPaintProperty('state-boundaries copy', 'fill-color', "#e8e8e8");
 
             map.setLayoutProperty('acis-reproj-7ytdey-top-layer', 'text-field', matchExpression);
@@ -314,7 +330,6 @@
             map.setLayoutProperty('acis-reproj-7ytdey', 'text-field', matchExpression);
 
             if(w < 500) {
-
                 map.setLayoutProperty('acis-reproj-7ytdey-top-layer', 'visibility', "none");
                 map.setLayoutProperty('acis-reproj-7ytdey-top-layer-mobile', 'visibility', "visible");
             }
@@ -355,8 +370,6 @@
             }
 
             map.on('mousemove', (e) => {
-
-                console.log(map.getZoom())
 
                 const features = map.queryRenderedFeatures(e.point);
                 // Limit the number of properties we're displaying for
@@ -442,9 +455,6 @@
             });
 
         })
-
-        
-
 	}
 
     function handleClick(mapLayer) {
@@ -453,7 +463,7 @@
         toHide = toHide.concat(layersMin.filter(d => d != mapLayer));
 
         for (let layer in toHide){
-        
+
             map.setLayoutProperty(
                 `acis-${toHide[layer]}`,
                 'visibility',
@@ -471,7 +481,7 @@
                 'visibility',
                 'none'
             );
-            
+
         }
 
 		map.setLayoutProperty(
@@ -506,7 +516,7 @@
 		on:load={load}
 	/>
 </svelte:head>
-<!-- 
+<!--
 <p>Day-time Max</p>
 {#each layers as layer}
     <button on:click={() => handleClick(layer)}>{layer}</button>

@@ -32,24 +32,24 @@
   	--color-highlight: var(--color-yellow);
 }
 
-.mapboxgl-popup {
+#content .mapboxgl-popup {
 	font-family: 'Yantramanav';
 	font-size: 18px;
 	z-index: 1000;
 	pointer-events: none;
 }
 
-.mapboxgl-popup .mapboxgl-popup-content {
+#content .mapboxgl-popup .mapboxgl-popup-content {
 	box-shadow: 0 0 10px 1px rgba(0,0,0,.10);
 	padding-right: 30px;
 }
 
-.mapboxgl-canvas-container {
+#content .mapboxgl-canvas-container {
 	width:100%;
 	position: relative;
 }
 
-.mapboxgl-canvas-container:before {
+#content .mapboxgl-canvas-container:before {
 	content: '';
 	padding-top: 57.8910152867%;
 	display: block;
@@ -91,18 +91,14 @@
 	left: 15px;
 }
 
-.mapboxgl-popup-close-button {
+#content .mapboxgl-popup-close-button {
 	background: #e7e7e7;
 	height: 38px;
 }
 
 @media only screen and (max-width: 500px) {
-	.mapboxgl-popup {
+	#content .mapboxgl-popup {
 		display: none;
-	}
-
-	.mapboxgl-popup {
 		pointer-events: all;
 	}
-
 }
